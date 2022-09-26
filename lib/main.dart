@@ -11,8 +11,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+  TextEditingController inputSuhu = TextEditingController();
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
+
     return MaterialApp(
       title: 'Kalkulator Suhu',
       theme: ThemeData(
@@ -26,14 +33,25 @@ class _MyAppState extends State<MyApp> {
         margin: const EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text("Test Inputan"),
+          children: [
+            inputUser(),
             Text("Test Output"),
             Text("Test Submit"),
           ],
         ),
       )
       )
+    );
+  }
+
+  inputUser(){
+    return TextFormField(
+      controller: inputSuhu,
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(),
+        labelText: 'Masukan Suhu Dalam Celcius',
+      ),
     );
   }
 }
