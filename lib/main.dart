@@ -25,6 +25,15 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  String dropdownvalue = 'Kelvin';  
+
+  var items = [   
+    'Kelvin',
+    'Reamur',
+    'Fahrenheit',
+    'Celcius',
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +52,53 @@ class _MyAppState extends State<MyApp> {
       body: Container(
         margin: const EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            inputUser(),
-            outputSuhu(),
-            buttonKonversiSuhu(),
+          children: [ 
+            Expanded(
+              child :
+                Container(
+                  child : 
+                    Column(
+                      children : [
+                        inputUser(),
+                        dropDown(),
+                        outputSuhu(),
+                        buttonKonversiSuhu(),
+                      ],
+                    ),
+                ),
+          ),
           ],
         ),
       )
       )
+    );
+  }
+
+  dropDown() {
+    return Container(
+      child: DropdownButton(
+          
+        // Initial Value
+        value: dropdownvalue,
+          
+        // Down Arrow Icon
+        icon: const Icon(Icons.keyboard_arrow_down),   
+          
+        // Array list of items
+        items: items.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(items),
+          );
+        }).toList(),
+        // After selecting the desired option,it will
+        // change button value to selected value
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownvalue = newValue!;
+          });
+        },
+      ),
     );
   }
 
@@ -61,7 +108,7 @@ class _MyAppState extends State<MyApp> {
       keyboardType: TextInputType.number,
       decoration: const InputDecoration(
         border: UnderlineInputBorder(),
-        labelText: 'Masukan Suhu Dalam Celcius',
+        labelText: 'Masukan Suhu',
       ),
     );
   }
