@@ -16,12 +16,24 @@ class _MyAppState extends State<MyApp> {
   double celcius = 0;
   double kelvin = 0;
   double reamur = 0;
+  double hasil = 0;
 
   konversiSuhu() {
     setState(() {
-      celcius = double.parse(inputSuhu.text);
-      reamur = 4 / 5 * celcius;
-      kelvin = 273.15 + celcius;
+      if (dropdownvalue == 'Kelvin') {
+        celcius = double.parse(inputSuhu.text);
+        kelvin = 273.15 + celcius;
+        hasil = kelvin;
+      }else if(dropdownvalue == 'Reamur'){
+        celcius = double.parse(inputSuhu.text);
+        reamur = 4 / 5 * celcius;
+        hasil = reamur;
+      }else if(dropdownvalue == 'Celcius'){
+        celcius = double.parse(inputSuhu.text);
+        hasil = celcius;
+      }
+
+      history.add("$dropdownvalue: $hasil");
     });
   }
 
@@ -30,9 +42,10 @@ class _MyAppState extends State<MyApp> {
   var items = [   
     'Kelvin',
     'Reamur',
-    'Fahrenheit',
     'Celcius',
   ];
+
+  List<String> history = <String>[];
 
 
   @override
@@ -46,6 +59,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Text('Kalkulator Suhu'),
       ),
@@ -61,11 +75,19 @@ class _MyAppState extends State<MyApp> {
                       children : [
                         inputUser(),
                         dropDown(),
+                        const SizedBox(height :20),
                         outputSuhu(),
                         buttonKonversiSuhu(),
                       ],
                     ),
                 ),
+          ),
+            Expanded(
+              child: 
+                Container(
+                  child: 
+                    riwayatKonversi(history: history),
+                  ),
           ),
           ],
         ),
@@ -100,6 +122,7 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
+    
   }
 
   inputUser(){
@@ -119,31 +142,17 @@ class _MyAppState extends State<MyApp> {
       children: [
         Column(            
           children: [
-            const Text('Suhu dalam Kelvin', 
+            const Text('Hasil', 
             style: TextStyle(
-              fontSize: 15
+              fontSize: 20
             ),),
             const SizedBox(height :20),
-            Text("$kelvin", 
+            Text("$hasil", 
             style: const TextStyle(
               fontSize: 30
             ),
-            )
-          ],
-        ),
-
-        Column(
-          children: [
-            const Text('Suhu dalam Reamur', 
-            style: TextStyle(
-              fontSize: 15
-            ),),
-            const SizedBox(height :20),
-            Text("$reamur", 
-            style: const TextStyle(
-              fontSize: 30
             ),
-            )
+            const SizedBox(height :20),
           ],
         ),
       ],
@@ -157,6 +166,40 @@ class _MyAppState extends State<MyApp> {
         child: const Text('Konversi Suhu'),
         onPressed: () => konversiSuhu(),
       )
+    );
+  }
+}
+
+class riwayatKonversi extends StatelessWidget {
+  const riwayatKonversi({
+    Key? key,
+    required this.history,
+  }) : super(key: key);
+
+  final List<String> history;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children:[
+       const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Riwayat Konversi',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+         Expanded(
+          child: ListView.builder(
+            itemCount: history.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(history[index]),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
